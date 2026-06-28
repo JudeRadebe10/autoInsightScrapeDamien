@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
+
 from database import get_database_connection
 from typing import Optional
 import numpy as np
@@ -23,7 +23,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.mount("/static", StaticFiles(directory=os.path.dirname(os.path.abspath(__file__))), name="static")
+
 
 # DB helper:
 def open_cursor(connection):
