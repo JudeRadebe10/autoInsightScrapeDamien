@@ -175,7 +175,7 @@ def homepage_featured_vehicles():
             FROM vehicles v
             LEFT JOIN sellers s ON v.vehicle_id = s.vehicle_id
             LEFT JOIN (
-                SELECT vehicle_id, ANY_VALUE(image_url) AS main_image
+                SELECT vehicle_id, ANY_VALUE(COALESCE(main_image, image_url)) AS main_image
                 FROM vehicle_images
                 WHERE is_primary = 1
                 GROUP BY vehicle_id
@@ -258,7 +258,7 @@ def get_vehicles(page: int = 1, limit: int = 24):
             FROM vehicles v
             LEFT JOIN sellers s ON v.vehicle_id = s.vehicle_id
             LEFT JOIN (
-                SELECT vehicle_id, ANY_VALUE(image_url) AS main_image
+                SELECT vehicle_id, ANY_VALUE(COALESCE(main_image, image_url)) AS main_image
                 FROM vehicle_images
                 WHERE is_primary = 1
                 GROUP BY vehicle_id
@@ -434,7 +434,7 @@ def search_vehicles(
             LEFT JOIN sellers s ON v.vehicle_id = s.vehicle_id
             {vd_join}
             LEFT JOIN (
-                SELECT vehicle_id, ANY_VALUE(image_url) AS main_image
+                SELECT vehicle_id, ANY_VALUE(COALESCE(main_image, image_url)) AS main_image
                 FROM vehicle_images
                 WHERE is_primary = 1
                 GROUP BY vehicle_id
@@ -944,7 +944,7 @@ def estimator_similar_vehicles(
                 ml.deal_label, ml.deal_pct, ml.predicted_price
             FROM vehicles v
             LEFT JOIN (
-                SELECT vehicle_id, ANY_VALUE(image_url) AS main_image
+                SELECT vehicle_id, ANY_VALUE(COALESCE(main_image, image_url)) AS main_image
                 FROM vehicle_images WHERE is_primary = 1 GROUP BY vehicle_id
             ) vi ON v.vehicle_id = vi.vehicle_id
             LEFT JOIN sellers s ON v.vehicle_id = s.vehicle_id
@@ -1214,7 +1214,7 @@ def ml_deals(
             JOIN vehicles v ON ml.vehicle_id = v.vehicle_id
             LEFT JOIN sellers s ON v.vehicle_id = s.vehicle_id
             LEFT JOIN (
-                SELECT vehicle_id, ANY_VALUE(image_url) AS main_image
+                SELECT vehicle_id, ANY_VALUE(COALESCE(main_image, image_url)) AS main_image
                 FROM vehicle_images WHERE is_primary = 1 GROUP BY vehicle_id
             ) vi ON v.vehicle_id = vi.vehicle_id
             {where}
